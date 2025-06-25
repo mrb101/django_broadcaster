@@ -15,7 +15,7 @@ The simplest way to publish an event is using the publisher:
 
 .. code-block:: python
 
-    from django_dispatch.publishers import publisher
+    from django_broadcaster.publishers import publisher
 
     # Publish an event
     event = publisher.publish_event(
@@ -33,8 +33,8 @@ You can also create and publish CloudEvents directly:
 
 .. code-block:: python
 
-    from django_dispatch.events import CloudEvent
-    from django_dispatch.publishers import publisher
+    from django_broadcaster.events import CloudEvent
+    from django_broadcaster.publishers import publisher
 
     # Create a CloudEvent
     cloud_event = CloudEvent(
@@ -79,7 +79,7 @@ You can register handlers for specific event types:
 
 .. code-block:: python
 
-    from django_dispatch.registry import event_registry
+    from django_broadcaster.registry import event_registry
 
     @event_registry.register('user.created')
     def handle_user_created(event):
@@ -142,7 +142,7 @@ To ensure events are only published if a transaction is successful, use Django's
 .. code-block:: python
 
     from django.db import transaction
-    from django_dispatch.publishers import publisher
+    from django_broadcaster.publishers import publisher
 
     @transaction.atomic
     def create_user_with_event(username, email):

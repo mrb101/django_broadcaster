@@ -11,8 +11,8 @@ Setting Up Development Environment
 
    .. code-block:: bash
 
-       git clone https://github.com/mrb101/django-dispatch.git
-       cd django-dispatch
+       git clone https://github.com/mrb101/django-broadcaster.git
+       cd django-broadcaster
 
 3. Create a virtual environment and install development dependencies:
 
@@ -88,7 +88,7 @@ To run tests with coverage:
 
 .. code-block:: bash
 
-    pytest --cov=django_dispatch
+    pytest --cov=django_broadcaster
 
 Building Documentation
 --------------------

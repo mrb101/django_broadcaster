@@ -2,8 +2,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from django_dispatch.models import OutboxEvent
-from django_dispatch.registry import EventHandlerRegistry, event_registry
+from django_broadcaster.models import OutboxEvent
+from django_broadcaster.registry import EventHandlerRegistry, event_registry
 
 
 class TestEventHandlerRegistry:

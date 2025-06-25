@@ -35,19 +35,19 @@
             
   <section id="signals-api">
 <h1>Signals API<a class="headerlink" href="#signals-api" title="Link to this heading">¶</a></h1>
-<p id="module-django_dispatch.signals">This module contains the signal handlers used by Django Dispatch.</p>
+<p id="module-django_broadcaster.signals">This module contains the signal handlers used by Django Dispatch.</p>
 <section id="signal-handlers">
 <h2>Signal Handlers<a class="headerlink" href="#signal-handlers" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="django_dispatch.signals.handle_outbox_event_signals">
-<span class="sig-prename descclassname"><span class="pre">django_dispatch.signals.</span></span><span class="sig-name descname"><span class="pre">handle_outbox_event_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/django_dispatch/signals.html#handle_outbox_event_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#django_dispatch.signals.handle_outbox_event_signals" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="django_broadcaster.signals.handle_outbox_event_signals">
+<span class="sig-prename descclassname"><span class="pre">django_broadcaster.signals.</span></span><span class="sig-name descname"><span class="pre">handle_outbox_event_signals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/django_broadcaster/signals.html#handle_outbox_event_signals"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#django_broadcaster.signals.handle_outbox_event_signals" title="Link to this definition">¶</a></dt>
 <dd><p>Handle signals for outbox events</p>
 </dd></dl>
 
 </section>
 <section id="django-signals">
 <h2>Django Signals<a class="headerlink" href="#django-signals" title="Link to this heading">¶</a></h2>
-<p>Django Dispatch uses the following signals from the <a class="reference internal" href="registry.html#module-django_dispatch.registry" title="django_dispatch.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">django_dispatch.registry</span></code></a> module:</p>
+<p>Django Dispatch uses the following signals from the <a class="reference internal" href="registry.html#module-django_broadcaster.registry" title="django_broadcaster.registry"><code class="xref py py-mod docutils literal notranslate"><span class="pre">django_broadcaster.registry</span></code></a> module:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">event_created</span></code>: Dispatched when an event is created</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">event_published</span></code>: Dispatched when an event is published</p></li>
@@ -57,7 +57,7 @@
 <section id="example-usage">
 <h2>Example Usage<a class="headerlink" href="#example-usage" title="Link to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">receiver</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_created</span><span class="p">,</span> <span class="n">event_published</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_created</span><span class="p">,</span> <span class="n">event_published</span>
 
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">event_created</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">handle_event_created</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>

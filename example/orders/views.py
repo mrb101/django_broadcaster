@@ -5,8 +5,8 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from django_dispatch.events import CloudEvent
-from django_dispatch.publishers import publisher
+from django_broadcaster.events import CloudEvent
+from django_broadcaster.publishers import publisher
 
 from .models import Order, OrderItem, Product
 

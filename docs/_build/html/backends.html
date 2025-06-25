@@ -43,7 +43,7 @@
 <h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_broadcaster.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
         <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
             <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
@@ -101,8 +101,8 @@
 <section id="creating-a-custom-backend">
 <h2>Creating a Custom Backend<a class="headerlink" href="#creating-a-custom-backend" title="Link to this heading">¶</a></h2>
 <p>You can create custom backends by implementing the <code class="docutils literal notranslate"><span class="pre">PublisherBackend</span></code> abstract base class:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">PublisherBackend</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">OutboxEvent</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">PublisherBackend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">OutboxEvent</span>
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MyCustomBackend</span><span class="p">(</span><span class="n">PublisherBackend</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -155,7 +155,7 @@
 <p>To use your custom backend, you need to register it in the publisher:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your app&#39;s apps.py or a module that runs at startup</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">myapp.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyCustomBackend</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">register_custom_backend</span><span class="p">():</span>

@@ -1,7 +1,7 @@
 Models API
 =========
 
-.. module:: django_dispatch.models
+.. module:: django_broadcaster.models
 
 This module contains the database models used by Django Dispatch.
 

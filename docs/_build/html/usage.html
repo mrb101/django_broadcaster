@@ -42,7 +42,7 @@
 <section id="basic-event-publishing">
 <h3>Basic Event Publishing<a class="headerlink" href="#basic-event-publishing" title="Link to this heading">¶</a></h3>
 <p>The simplest way to publish an event is using the publisher:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
 
 <span class="c1"># Publish an event</span>
 <span class="n">event</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
@@ -57,8 +57,8 @@
 <section id="publishing-cloudevents">
 <h3>Publishing CloudEvents<a class="headerlink" href="#publishing-cloudevents" title="Link to this heading">¶</a></h3>
 <p>You can also create and publish CloudEvents directly:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">CloudEvent</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">CloudEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
 
 <span class="c1"># Create a CloudEvent</span>
 <span class="n">cloud_event</span> <span class="o">=</span> <span class="n">CloudEvent</span><span class="p">(</span>
@@ -98,7 +98,7 @@
 <section id="registering-event-handlers">
 <h3>Registering Event Handlers<a class="headerlink" href="#registering-event-handlers" title="Link to this heading">¶</a></h3>
 <p>You can register handlers for specific event types:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_registry</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_registry</span>
 
 <span class="nd">@event_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;user.created&#39;</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">handle_user_created</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -152,7 +152,7 @@
 <h3>Transactional Publishing<a class="headerlink" href="#transactional-publishing" title="Link to this heading">¶</a></h3>
 <p>To ensure events are only published if a transaction is successful, use Django’s transaction management:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">transaction</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
 
 <span class="nd">@transaction</span><span class="o">.</span><span class="n">atomic</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">create_user_with_event</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>

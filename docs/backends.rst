@@ -15,7 +15,7 @@ Configuration
 
     OUTBOX_PUBLISHERS = {
         'default': {
-            'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+            'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
             'OPTIONS': {
                 'host': 'localhost',
                 'port': 6379,
@@ -75,8 +75,8 @@ You can create custom backends by implementing the ``PublisherBackend`` abstract
 
 .. code-block:: python
 
-    from django_dispatch.backends import PublisherBackend
-    from django_dispatch.models import OutboxEvent
+    from django_broadcaster.backends import PublisherBackend
+    from django_broadcaster.models import OutboxEvent
 
     class MyCustomBackend(PublisherBackend):
         """
@@ -132,7 +132,7 @@ To use your custom backend, you need to register it in the publisher:
 
     # In your app's apps.py or a module that runs at startup
 
-    from django_dispatch.publishers import publisher
+    from django_broadcaster.publishers import publisher
     from myapp.backends import MyCustomBackend
 
     def register_custom_backend():

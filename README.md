@@ -1,17 +1,17 @@
-# Django Outbox
+# Django Broadcaster
 
-[![PyPI version](https://badge.fury.io/py/django-outbox.svg)](https://badge.fury.io/py/django-outbox)
-[![Python versions](https://img.shields.io/pypi/pyversions/django-outbox.svg)](https://pypi.org/project/django-outbox/)
-[![Django versions](https://img.shields.io/pypi/djversions/django-outbox.svg)](https://pypi.org/project/django-outbox/)
+[![PyPI version](https://badge.fury.io/py/django-broadcaster.svg)](https://badge.fury.io/py/django-broadcaster)
+[![Python versions](https://img.shields.io/pypi/pyversions/django-broadcaster.svg)](https://pypi.org/project/django-broadcaster/)
+[![Django versions](https://img.shields.io/pypi/djversions/django-broadcaster.svg)](https://pypi.org/project/django-broadcaster/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![CI](https://github.com/yourusername/django-outbox/workflows/CI/badge.svg)](https://github.com/yourusername/django-outbox/actions)
-[![Coverage](https://codecov.io/gh/yourusername/django-outbox/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/django-outbox)
+[![CI](https://github.com/mrb101/django-broadcaster/workflows/CI/badge.svg)](https://github.com/mrb101/django-outbox/actions)
+[![Coverage](https://codecov.io/gh/mrb101/django-outbox/branch/main/graph/badge.svg)](https://codecov.io/gh/mrb101/django-broadcaster)
 
 A Django app that implements the transactional outbox pattern with CloudEvents support, enabling reliable event publishing in distributed systems.
 
 ## Features
 
-- 🔄 **Transactional Outbox Pattern**: Ensures events are published reliably
+- 🔄 **Transactional Broadcaster Pattern**: Ensures events are published reliably
 - ☁️ **CloudEvents Compatible**: Follows CloudEvents specification
 - 🔌 **Multiple Backends**: Redis Streams, Kafka, NATS support
 - 🔁 **Retry Logic**: Exponential backoff with configurable retries
@@ -26,10 +26,10 @@ A Django app that implements the transactional outbox pattern with CloudEvents s
 
 ```bash
 # Using pip
-pip install django-dispatch
+pip install django-broadcaster
 
 # Using uv
-uv add django-dispatch
+uv add django-broadcaster
 ```
 
 ## Configuration
@@ -38,12 +38,12 @@ Add to your Django settings:
 ```python
 INSTALLED_APPS = [
     # ... your other apps
-    'django_dispatch',
+    'django_broadcaster',
 ]
 
 OUTBOX_PUBLISHERS = {
     'default': {
-        'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+        'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
         'OPTIONS': {
             'host': 'localhost',
             'port': 6379,
@@ -55,7 +55,7 @@ OUTBOX_PUBLISHERS = {
 
 ## Usage
 ```python
-from django_dispatch.publishers import publisher
+from django_broadcaster.publishers import publisher
 
 # Publish an event
 event = publisher.publish_event(
@@ -65,7 +65,7 @@ event = publisher.publish_event(
 )
 
 # Register event handler
-from django_dispatch.registry import event_registry
+from django_broadcaster.registry import event_registry
 
 @event_registry.register('user.created')
 def handle_user_created(event):
@@ -77,7 +77,7 @@ def handle_user_created(event):
 python manage.py outbox_worker
 ```
 ## Documentation
-Full documentation is available at https://django-dispatch.readthedocs.io/en/latest/.
+Full documentation is available at https://django-broadcaster.readthedocs.io/en/latest/.
 
 ### Building and Serving Documentation Locally
 

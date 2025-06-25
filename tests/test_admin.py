@@ -5,8 +5,8 @@ from django.contrib.admin.sites import AdminSite
 from django.contrib.messages.storage.fallback import FallbackStorage
 from django.test import RequestFactory
 
-from django_dispatch.admin import OutboxEventAdmin
-from django_dispatch.models import OutboxEvent, OutboxEventStatus
+from django_broadcaster.admin import OutboxEventAdmin
+from django_broadcaster.models import OutboxEvent, OutboxEventStatus
 
 
 class TestOutboxEventAdmin:

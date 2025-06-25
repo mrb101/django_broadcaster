@@ -22,7 +22,7 @@ def pytest_configure():
             "django.contrib.contenttypes",
             "django.contrib.sites",
             "django.contrib.admin",
-            "django_dispatch",
+            "django_broadcaster",
         ],
         SITE_ID=1,
         MIDDLEWARE=[],
@@ -44,7 +44,7 @@ def pytest_configure():
         ],
         OUTBOX_PUBLISHERS={
             "default": {
-                "BACKEND": "django_dispatch.backends.RedisStreamBackend",
+                "BACKEND": "django_broadcaster.backends.RedisStreamBackend",
                 "OPTIONS": {
                     "host": "localhost",
                     "port": 6379,
@@ -65,7 +65,7 @@ def outbox_event():
     """
     Create a test OutboxEvent instance
     """
-    from django_dispatch.models import OutboxEvent
+    from django_broadcaster.models import OutboxEvent
 
     event = OutboxEvent.objects.create(
         event_type="test.event",
@@ -82,7 +82,7 @@ def cloud_event():
     """
     Create a test CloudEvent instance
     """
-    from django_dispatch.events import CloudEvent
+    from django_broadcaster.events import CloudEvent
 
     event = CloudEvent(
         event_type="test.event",

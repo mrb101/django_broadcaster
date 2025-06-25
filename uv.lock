@@ -159,7 +159,7 @@ wheels = [
 ]
 
 [[package]]
-name = "django-dispatch"
+name = "django-broadcaster"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
@@ -182,7 +182,7 @@ docs = [
 
 [package.dev-dependencies]
 dev = [
-    { name = "django-dispatch", extra = ["docs"] },
+    { name = "django-broadcaster", extra = ["docs"] },
 ]
 
 [package.metadata]
@@ -200,7 +200,7 @@ requires-dist = [
 provides-extras = ["dev", "docs"]
 
 [package.metadata.requires-dev]
-dev = [{ name = "django-dispatch", extras = ["docs"], editable = "." }]
+dev = [{ name = "django-broadcaster", extras = ["docs"], editable = "." }]
 
 [[package]]
 name = "docutils"

@@ -13,7 +13,7 @@ pytest
 Or to run with coverage:
 
 ```bash
-pytest --cov=django_dispatch
+pytest --cov=django_broadcaster
 ```
 
 ## Test Structure

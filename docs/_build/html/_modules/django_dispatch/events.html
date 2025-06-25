@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>django_dispatch.events &mdash; Django Dispatch 0.1.0 documentation</title>
+  <title>django_broadcaster.events &mdash; Django Dispatch 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
@@ -76,7 +76,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">django_dispatch.events</li>
+      <li class="breadcrumb-item active">django_broadcaster.events</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,19 +85,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for django_dispatch.events</h1><div class="highlight"><pre>
+  <h1>Source code for django_broadcaster.events</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
 
 
 <div class="viewcode-block" id="CloudEvent">
-<a class="viewcode-back" href="../../api/events.html#django_dispatch.events.CloudEvent">[docs]</a>
+<a class="viewcode-back" href="../../api/events.html#django_broadcaster.events.CloudEvent">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CloudEvent</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    CloudEvent interface compatible with CloudEvents specification</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CloudEvent.__init__">
-<a class="viewcode-back" href="../../api/events.html#django_dispatch.events.CloudEvent.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/events.html#django_broadcaster.events.CloudEvent.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">event_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -118,7 +118,7 @@
 
 
 <div class="viewcode-block" id="CloudEvent.to_dict">
-<a class="viewcode-back" href="../../api/events.html#django_dispatch.events.CloudEvent.to_dict">[docs]</a>
+<a class="viewcode-back" href="../../api/events.html#django_broadcaster.events.CloudEvent.to_dict">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert to dictionary representation&quot;&quot;&quot;</span>
         <span class="n">event_dict</span> <span class="o">=</span> <span class="p">{</span>

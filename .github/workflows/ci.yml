@@ -43,13 +43,13 @@ jobs:
 
     - name: Run linting
       run: |
-        uv run flake8 django_dispatch
-        uv run black --check django_dispatch
-        uv run isort --check-only django_dispatch
+        uv run flake8 django_broadcaster
+        uv run black --check django_broadcaster
+        uv run isort --check-only django_broadcaster
 
     - name: Run type checking
       run: |
-        uv run mypy django_dispatch
+        uv run mypy django_broadcaster
 
     - name: Run tests
       run: |

@@ -1,7 +1,7 @@
 import logging
 
-from django_dispatch.models import OutboxEvent
-from django_dispatch.registry import event_registry
+from django_broadcaster.models import OutboxEvent
+from django_broadcaster.registry import event_registry
 
 logger = logging.getLogger(__name__)
 

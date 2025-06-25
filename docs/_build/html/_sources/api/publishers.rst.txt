@@ -1,7 +1,7 @@
 Publishers API
 ============
 
-.. module:: django_dispatch.publishers
+.. module:: django_broadcaster.publishers
 
 This module contains the publisher classes used to publish events to the outbox.
 
@@ -34,7 +34,7 @@ Singleton Instance
 
    .. code-block:: python
 
-       from django_dispatch.publishers import publisher
+       from django_broadcaster.publishers import publisher
 
        event = publisher.publish_event(
            event_type='user.created',

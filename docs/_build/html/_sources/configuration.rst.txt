@@ -12,7 +12,7 @@ At a minimum, you need to configure at least one publisher backend:
 
     OUTBOX_PUBLISHERS = {
         'default': {
-            'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+            'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
             'OPTIONS': {
                 'host': 'localhost',
                 'port': 6379,
@@ -30,7 +30,7 @@ You can configure multiple backends for different types of events:
 
     OUTBOX_PUBLISHERS = {
         'default': {
-            'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+            'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
             'OPTIONS': {
                 'host': 'localhost',
                 'port': 6379,
@@ -38,7 +38,7 @@ You can configure multiple backends for different types of events:
             }
         },
         'high_priority': {
-            'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+            'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
             'OPTIONS': {
                 'host': 'redis.example.com',
                 'port': 6379,
@@ -52,7 +52,7 @@ When publishing events, you can specify which backend to use:
 
 .. code-block:: python
 
-    from django_dispatch.publishers import publisher
+    from django_broadcaster.publishers import publisher
 
     publisher.publish_event(
         event_type='user.created',
@@ -130,7 +130,7 @@ Django Dispatch uses Python's logging module. You can configure logging in your 
             },
         },
         'loggers': {
-            'django_dispatch': {
+            'django_broadcaster': {
                 'handlers': ['console'],
                 'level': 'INFO',
             },

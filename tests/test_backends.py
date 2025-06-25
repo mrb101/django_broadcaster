@@ -3,8 +3,8 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from django_dispatch.backends import PublisherBackend, RedisStreamBackend
-from django_dispatch.models import OutboxEvent
+from django_broadcaster.backends import PublisherBackend, RedisStreamBackend
+from django_broadcaster.models import OutboxEvent
 
 
 class TestPublisherBackend:

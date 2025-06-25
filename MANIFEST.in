@@ -1,6 +1,6 @@
 include README.md
 include LICENSE
-recursive-include django_dispatch/src/django_dispatch/templates *
-recursive-include django_dispatch/src/django_dispatch/static *
+recursive-include django_broadcaster/src/django_broadcaster/templates *
+recursive-include django_broadcaster/src/django_broadcaster/static *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]

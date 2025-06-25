@@ -1,7 +1,7 @@
 import pytest
 from django.utils import timezone
 
-from django_dispatch.models import OutboxEvent, OutboxEventStatus
+from django_broadcaster.models import OutboxEvent, OutboxEventStatus
 
 
 @pytest.mark.django_db

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>django_dispatch.backends &mdash; Django Dispatch 0.1.0 documentation</title>
+  <title>django_broadcaster.backends &mdash; Django Dispatch 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
@@ -76,7 +76,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">django_dispatch.backends</li>
+      <li class="breadcrumb-item active">django_broadcaster.backends</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,7 +85,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for django_dispatch.backends</h1><div class="highlight"><pre>
+  <h1>Source code for django_broadcaster.backends</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
@@ -93,20 +93,20 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">redis</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">OutboxEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">OutboxEvent</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PublisherBackend">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.PublisherBackend">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.PublisherBackend">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">PublisherBackend</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Abstract base class for publisher backends</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PublisherBackend.publish">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.PublisherBackend.publish">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.PublisherBackend.publish">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">OutboxEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -125,7 +125,7 @@
 
 
 <div class="viewcode-block" id="PublisherBackend.health_check">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.PublisherBackend.health_check">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.PublisherBackend.health_check">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -138,7 +138,7 @@
 
 
 <div class="viewcode-block" id="PublisherBackend.get_name">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.PublisherBackend.get_name">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.PublisherBackend.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the backend name&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
@@ -147,14 +147,14 @@
 
 
 <div class="viewcode-block" id="RedisStreamBackend">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.RedisStreamBackend">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.RedisStreamBackend">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RedisStreamBackend</span><span class="p">(</span><span class="n">PublisherBackend</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Redis Stream publisher backend</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RedisStreamBackend.__init__">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.RedisStreamBackend.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.RedisStreamBackend.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">redis_client</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span>
@@ -172,7 +172,7 @@
 
 
 <div class="viewcode-block" id="RedisStreamBackend.publish">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.RedisStreamBackend.publish">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.RedisStreamBackend.publish">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">OutboxEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Publish event to Redis Stream</span>
@@ -211,7 +211,7 @@
 
 
 <div class="viewcode-block" id="RedisStreamBackend.health_check">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.RedisStreamBackend.health_check">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.RedisStreamBackend.health_check">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check Redis connection health</span>
@@ -225,7 +225,7 @@
 
 
 <div class="viewcode-block" id="RedisStreamBackend.get_name">
-<a class="viewcode-back" href="../../api/backends.html#django_dispatch.backends.RedisStreamBackend.get_name">[docs]</a>
+<a class="viewcode-back" href="../../api/backends.html#django_broadcaster.backends.RedisStreamBackend.get_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;RedisStream&quot;</span></div>
 </div>

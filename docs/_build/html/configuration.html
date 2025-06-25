@@ -41,7 +41,7 @@
 <p>At a minimum, you need to configure at least one publisher backend:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_broadcaster.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
         <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
             <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
@@ -57,7 +57,7 @@
 <p>You can configure multiple backends for different types of events:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_broadcaster.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
         <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
             <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
@@ -65,7 +65,7 @@
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="s1">&#39;high_priority&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_broadcaster.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
         <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;redis.example.com&#39;</span><span class="p">,</span>
             <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
@@ -77,7 +77,7 @@
 </pre></div>
 </div>
 <p>When publishing events, you can specify which backend to use:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_broadcaster.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
 
 <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
     <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;user.created&#39;</span><span class="p">,</span>
@@ -146,7 +146,7 @@
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;django_dispatch&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;django_broadcaster&#39;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">],</span>
             <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
         <span class="p">},</span>

@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Your reusable app
-    "django_dispatch",
+    "django_broadcaster",
     "orders",
 ]
 
@@ -123,7 +123,7 @@ LOGGING = {
 
 OUTBOX_PUBLISHERS = {
     "default": {
-        "BACKEND": "django_dispatch.backends.RedisStreamBackend",
+        "BACKEND": "django_broadcaster.backends.RedisStreamBackend",
         "OPTIONS": {
             "host": "redis",
             "port": 6379,

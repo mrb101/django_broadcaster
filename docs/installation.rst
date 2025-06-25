@@ -17,31 +17,31 @@ You can install Django Dispatch using pip:
 
 .. code-block:: bash
 
-    pip install django-dispatch
+    pip install django-broadcaster
 
 Or if you're using uv:
 
 .. code-block:: bash
 
-    uv add django-dispatch
+    uv add django-broadcaster
 
 Adding to Your Django Project
 ----------------------------
 
-1. Add ``django_dispatch`` to your ``INSTALLED_APPS`` in your Django settings:
+1. Add ``django_broadcaster`` to your ``INSTALLED_APPS`` in your Django settings:
 
    .. code-block:: python
 
        INSTALLED_APPS = [
            # ... other apps
-           'django_dispatch',
+           'django_broadcaster',
        ]
 
 2. Run migrations to create the necessary database tables:
 
    .. code-block:: bash
 
-       python manage.py migrate django_dispatch
+       python manage.py migrate django_broadcaster
 
 3. Configure the publisher backends in your Django settings (see :doc:`configuration` for details):
 
@@ -49,7 +49,7 @@ Adding to Your Django Project
 
        OUTBOX_PUBLISHERS = {
            'default': {
-               'BACKEND': 'django_dispatch.backends.RedisStreamBackend',
+               'BACKEND': 'django_broadcaster.backends.RedisStreamBackend',
                'OPTIONS': {
                    'host': 'localhost',
                    'port': 6379,

@@ -1,6 +1,6 @@
 import pytest
 
-from django_dispatch.events import CloudEvent
+from django_broadcaster.events import CloudEvent
 
 
 def test_cloud_event_initialization():

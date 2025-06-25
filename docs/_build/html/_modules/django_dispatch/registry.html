@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>django_dispatch.registry &mdash; Django Dispatch 0.1.0 documentation</title>
+  <title>django_broadcaster.registry &mdash; Django Dispatch 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
@@ -76,7 +76,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">django_dispatch.registry</li>
+      <li class="breadcrumb-item active">django_broadcaster.registry</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,7 +85,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for django_dispatch.registry</h1><div class="highlight"><pre>
+  <h1>Source code for django_broadcaster.registry</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
@@ -103,21 +103,21 @@
 
 
 <div class="viewcode-block" id="EventHandlerRegistry">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">EventHandlerRegistry</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Registry for event handlers that can process events locally</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EventHandlerRegistry.__init__">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry.__init__">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_handlers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_global_handlers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 
 <div class="viewcode-block" id="EventHandlerRegistry.register">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry.register">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry.register">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Decorator to register an event handler</span>
@@ -143,7 +143,7 @@
 
 
 <div class="viewcode-block" id="EventHandlerRegistry.handle_event">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry.handle_event">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry.handle_event">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">OutboxEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Handle an event by calling registered handlers</span>
@@ -187,7 +187,7 @@
 
 
 <div class="viewcode-block" id="EventHandlerRegistry.get_handlers">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry.get_handlers">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry.get_handlers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Callable</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get registered handlers for an event type&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">event_type</span><span class="p">:</span>
@@ -196,7 +196,7 @@
 
 
 <div class="viewcode-block" id="EventHandlerRegistry.clear_handlers">
-<a class="viewcode-back" href="../../api/registry.html#django_dispatch.registry.EventHandlerRegistry.clear_handlers">[docs]</a>
+<a class="viewcode-back" href="../../api/registry.html#django_broadcaster.registry.EventHandlerRegistry.clear_handlers">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">clear_handlers</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Clear handlers for an event type or all handlers&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">event_type</span><span class="p">:</span>

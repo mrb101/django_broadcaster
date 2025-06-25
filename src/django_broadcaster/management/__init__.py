@@ -4,7 +4,7 @@ import time
 
 from django.core.management.base import BaseCommand
 
-from django_dispatch.publishers import publisher
+from django_broadcaster.publishers import publisher
 
 logger = logging.getLogger(__name__)
 

@@ -3,19 +3,19 @@ from unittest.mock import MagicMock, patch
 import pytest
 from django.db.models.signals import post_save
 
-from django_dispatch.models import OutboxEvent, OutboxEventStatus
-from django_dispatch.registry import event_created, event_published
-from django_dispatch.signals import handle_outbox_event_signals
+from django_broadcaster.models import OutboxEvent, OutboxEventStatus
+from django_broadcaster.registry import event_created, event_published
+from django_broadcaster.signals import handle_outbox_event_signals
 
 
 @pytest.mark.django_db
 def test_handle_outbox_event_signals_created():
     """Test that the event_created signal is sent when an OutboxEvent is created"""
     # Mock the event_created signal
-    with patch("django_dispatch.signals.event_created.send") as mock_event_created:
+    with patch("django_broadcaster.signals.event_created.send") as mock_event_created:
         # Mock the event_registry
         with patch(
-            "django_dispatch.signals.event_registry.handle_event"
+            "django_broadcaster.signals.event_registry.handle_event"
         ) as mock_handle_event:
             # Create a new OutboxEvent
             event = OutboxEvent.objects.create(
@@ -39,7 +39,7 @@ def test_handle_outbox_event_signals_published():
     event = OutboxEvent.objects.create(event_type="test.event", source="test-source")
 
     # Mock the event_published signal
-    with patch("django_dispatch.signals.event_published.send") as mock_event_published:
+    with patch("django_broadcaster.signals.event_published.send") as mock_event_published:
         # Update the event to PUBLISHED status
         event.status = OutboxEventStatus.PUBLISHED
         event.save()

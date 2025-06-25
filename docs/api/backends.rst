@@ -1,7 +1,7 @@
 Backends API
 ===========
 
-.. module:: django_dispatch.backends
+.. module:: django_broadcaster.backends
 
 This module contains the backend classes used to publish events to external systems.
 
@@ -37,8 +37,8 @@ To create a custom backend, you need to subclass :class:`PublisherBackend` and i
 
 .. code-block:: python
 
-    from django_dispatch.backends import PublisherBackend
-    from django_dispatch.models import OutboxEvent
+    from django_broadcaster.backends import PublisherBackend
+    from django_broadcaster.models import OutboxEvent
 
     class MyCustomBackend(PublisherBackend):
         """

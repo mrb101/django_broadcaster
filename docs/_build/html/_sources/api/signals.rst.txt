@@ -1,7 +1,7 @@
 Signals API
 ==========
 
-.. module:: django_dispatch.signals
+.. module:: django_broadcaster.signals
 
 This module contains the signal handlers used by Django Dispatch.
 
@@ -13,7 +13,7 @@ Signal Handlers
 Django Signals
 ------------
 
-Django Dispatch uses the following signals from the :mod:`django_dispatch.registry` module:
+Django Dispatch uses the following signals from the :mod:`django_broadcaster.registry` module:
 
 * ``event_created``: Dispatched when an event is created
 * ``event_published``: Dispatched when an event is published
@@ -26,7 +26,7 @@ Example Usage
 .. code-block:: python
 
     from django.dispatch import receiver
-    from django_dispatch.registry import event_created, event_published
+    from django_broadcaster.registry import event_created, event_published
 
     @receiver(event_created)
     def handle_event_created(sender, event, **kwargs):

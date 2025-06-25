@@ -1,7 +1,7 @@
 Events API
 =========
 
-.. module:: django_dispatch.events
+.. module:: django_broadcaster.events
 
 This module contains the CloudEvent implementation used by Django Dispatch.
 

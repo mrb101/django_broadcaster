@@ -1,7 +1,7 @@
 Registry API
 ===========
 
-.. module:: django_dispatch.registry
+.. module:: django_broadcaster.registry
 
 This module contains the event handler registry and signals used by Django Dispatch.
 
@@ -31,7 +31,7 @@ Singleton Instance
 
    .. code-block:: python
 
-       from django_dispatch.registry import event_registry
+       from django_broadcaster.registry import event_registry
 
        @event_registry.register('user.created')
        def handle_user_created(event):
@@ -54,7 +54,7 @@ Signals
    .. code-block:: python
 
        from django.dispatch import receiver
-       from django_dispatch.registry import event_created
+       from django_broadcaster.registry import event_created
 
        @receiver(event_created)
        def handle_event_created(sender, event, **kwargs):
@@ -74,7 +74,7 @@ Signals
    .. code-block:: python
 
        from django.dispatch import receiver
-       from django_dispatch.registry import event_published
+       from django_broadcaster.registry import event_published
 
        @receiver(event_published)
        def handle_event_published(sender, event, **kwargs):

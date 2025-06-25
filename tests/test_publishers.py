@@ -3,9 +3,9 @@ from unittest.mock import MagicMock, patch
 import pytest
 from django.utils import timezone
 
-from django_dispatch.events import CloudEvent
-from django_dispatch.models import OutboxEvent, OutboxEventStatus
-from django_dispatch.publishers import OutboxPublisher
+from django_broadcaster.events import CloudEvent
+from django_broadcaster.models import OutboxEvent, OutboxEventStatus
+from django_broadcaster.publishers import OutboxPublisher
 
 
 class TestOutboxPublisher:
@@ -13,16 +13,16 @@ class TestOutboxPublisher:
 
     def test_initialization(self):
         """Test that OutboxPublisher initializes and loads backends"""
-        with patch("django_dispatch.publishers.getattr") as mock_getattr:
+        with patch("django_broadcaster.publishers.getattr") as mock_getattr:
             # Mock settings.OUTBOX_PUBLISHERS
             mock_getattr.return_value = {
                 "test_backend": {
-                    "BACKEND": "django_dispatch.backends.RedisStreamBackend",
+                    "BACKEND": "django_broadcaster.backends.RedisStreamBackend",
                     "OPTIONS": {"host": "test-host"},
                 }
             }
 
-            with patch("django_dispatch.publishers.RedisStreamBackend") as mock_backend:
+            with patch("django_broadcaster.publishers.RedisStreamBackend") as mock_backend:
                 publisher = OutboxPublisher()
 
                 # Check that the backend was loaded

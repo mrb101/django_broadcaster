@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>django_dispatch.signals &mdash; Django Dispatch 0.1.0 documentation</title>
+  <title>django_broadcaster.signals &mdash; Django Dispatch 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
@@ -76,7 +76,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">django_dispatch.signals</li>
+      <li class="breadcrumb-item active">django_broadcaster.signals</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -85,7 +85,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for django_dispatch.signals</h1><div class="highlight"><pre>
+  <h1>Source code for django_broadcaster.signals</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.db.models.signals</span><span class="w"> </span><span class="kn">import</span> <span class="n">post_save</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.dispatch</span><span class="w"> </span><span class="kn">import</span> <span class="n">receiver</span>
 
@@ -94,7 +94,7 @@
 
 
 <div class="viewcode-block" id="handle_outbox_event_signals">
-<a class="viewcode-back" href="../../api/signals.html#django_dispatch.signals.handle_outbox_event_signals">[docs]</a>
+<a class="viewcode-back" href="../../api/signals.html#django_broadcaster.signals.handle_outbox_event_signals">[docs]</a>
 <span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">OutboxEvent</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">handle_outbox_event_signals</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle signals for outbox events&quot;&quot;&quot;</span>

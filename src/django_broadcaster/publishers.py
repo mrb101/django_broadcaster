@@ -30,7 +30,7 @@ class OutboxPublisher:
             backend_class = config.get("BACKEND")
             backend_options = config.get("OPTIONS", {})
 
-            if backend_class == "django_dispatch.backends.RedisStreamBackend":
+            if backend_class == "django_broadcaster.backends.RedisStreamBackend":
                 self._backends[name] = RedisStreamBackend(backend_options)
             else:
                 logger.warning(f"Unknown backend class: {backend_class}")

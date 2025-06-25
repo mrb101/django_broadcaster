@@ -5,7 +5,7 @@ from typing import Any, Dict
 
 import redis
 
-from django_dispatch.models import OutboxEvent
+from django_broadcaster.models import OutboxEvent
 
 logger = logging.getLogger(__name__)
 
