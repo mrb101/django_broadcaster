@@ -73,7 +73,7 @@ exclude = [
 [project.urls]
 Homepage = "https://github.com/mrb101/django_broadcaster"
 Repository = "https://github.com/mrb101/django_broadcaster"
-Documentation = "https://django_broadcaster.readthedocs.io"
+Documentation = "https://django-broadcaster.readthedocs.io"
 "Bug Tracker" = "https://github.com/mrb101/django_broadcaster/issues"
 
 [tool.black]

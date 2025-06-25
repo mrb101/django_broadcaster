@@ -1,4 +1,4 @@
-Django Dispatch
+Django Broadcaster
 ==============
 
 .. image:: https://badge.fury.io/py/django-outbox.svg
