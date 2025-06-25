@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Backends &#8212; Django Dispatch 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Models API" href="api/models.html" />
+    <link rel="prev" title="Usage" href="usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="backends">
+<h1>Backends<a class="headerlink" href="#backends" title="Link to this heading">¶</a></h1>
+<p>Django Dispatch supports multiple backend implementations for publishing events to different systems. This page documents the available backends and how to configure them.</p>
+<section id="redis-stream-backend">
+<h2>Redis Stream Backend<a class="headerlink" href="#redis-stream-backend" title="Link to this heading">¶</a></h2>
+<p>The Redis Stream backend publishes events to a Redis Stream, which is a powerful append-only data structure in Redis that allows for efficient message queuing and processing.</p>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
+            <span class="s1">&#39;db&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s1">&#39;stream_name&#39;</span><span class="p">:</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;max_len&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+            <span class="s1">&#39;connect_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s1">&#39;socket_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h3>Options<a class="headerlink" href="#options" title="Link to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">host</span></code>: Redis server hostname (default: ‘localhost’)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">port</span></code>: Redis server port (default: 6379)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">db</span></code>: Redis database number (default: 0)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">password</span></code>: Redis password (optional)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stream_name</span></code>: Name of the Redis stream (default: ‘events’)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max_len</span></code>: Maximum length of the stream (default: 10000)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">connect_timeout</span></code>: Connection timeout in seconds (default: 5)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">socket_timeout</span></code>: Socket timeout in seconds (default: 5)</p></li>
+</ul>
+</section>
+<section id="consuming-events">
+<h3>Consuming Events<a class="headerlink" href="#consuming-events" title="Link to this heading">¶</a></h3>
+<p>To consume events from a Redis Stream, you can use the Redis client directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">redis</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="c1"># Connect to Redis</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">redis</span><span class="o">.</span><span class="n">Redis</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">6379</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Read from the stream</span>
+<span class="n">messages</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">xread</span><span class="p">({</span><span class="s1">&#39;events&#39;</span><span class="p">:</span> <span class="s1">&#39;0&#39;</span><span class="p">},</span> <span class="n">count</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">block</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">stream_name</span><span class="p">,</span> <span class="n">stream_messages</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">message_id</span><span class="p">,</span> <span class="n">message_data</span> <span class="ow">in</span> <span class="n">stream_messages</span><span class="p">:</span>
+        <span class="c1"># Parse the CloudEvent</span>
+        <span class="n">cloud_event</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message_data</span><span class="p">[</span><span class="sa">b</span><span class="s1">&#39;cloud_event&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="c1"># Process the event</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received event: </span><span class="si">{</span><span class="n">cloud_event</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">cloud_event</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Acknowledge the message</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">xack</span><span class="p">(</span><span class="n">stream_name</span><span class="p">,</span> <span class="s1">&#39;consumer_group&#39;</span><span class="p">,</span> <span class="n">message_id</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="creating-a-custom-backend">
+<h2>Creating a Custom Backend<a class="headerlink" href="#creating-a-custom-backend" title="Link to this heading">¶</a></h2>
+<p>You can create custom backends by implementing the <code class="docutils literal notranslate"><span class="pre">PublisherBackend</span></code> abstract base class:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">PublisherBackend</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">OutboxEvent</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MyCustomBackend</span><span class="p">(</span><span class="n">PublisherBackend</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Custom publisher backend implementation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="c1"># Initialize your backend with the provided configuration</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">publish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">OutboxEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Publish an event to your custom backend</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The OutboxEvent to publish</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Convert to CloudEvent format</span>
+            <span class="n">cloud_event</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">to_cloud_event</span><span class="p">()</span>
+
+            <span class="c1"># Implement your publishing logic here</span>
+            <span class="c1"># ...</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Log the error and re-raise</span>
+            <span class="k">raise</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">health_check</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the backend is healthy and available</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if healthy, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Implement your health check logic here</span>
+            <span class="c1"># ...</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<section id="registering-a-custom-backend">
+<h3>Registering a Custom Backend<a class="headerlink" href="#registering-a-custom-backend" title="Link to this heading">¶</a></h3>
+<p>To use your custom backend, you need to register it in the publisher:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># In your app&#39;s apps.py or a module that runs at startup</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">myapp.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">MyCustomBackend</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">register_custom_backend</span><span class="p">():</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">_backends</span><span class="p">[</span><span class="s1">&#39;my_custom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MyCustomBackend</span><span class="p">({</span>
+        <span class="s1">&#39;option1&#39;</span><span class="p">:</span> <span class="s1">&#39;value1&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;option2&#39;</span><span class="p">:</span> <span class="s1">&#39;value2&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+
+<span class="c1"># Call this function during app initialization</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Dispatch</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Backends</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#redis-stream-backend">Redis Stream Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-a-custom-backend">Creating a Custom Backend</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/events.html">Events API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/publishers.html">Publishers API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/registry.html">Registry API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/backends.html">Backends API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/signals.html">Signals API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="usage.html" title="previous chapter">Usage</a></li>
+      <li>Next: <a href="api/models.html" title="next chapter">Models API</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023, Hamadeh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/backends.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

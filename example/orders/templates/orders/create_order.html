@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Create New Order{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1>Create New Order</h1>
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Available Products</h4>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Select</th>
+                <th>Product Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for product in products %}
+              <tr>
+                <td>
+                  <input type="checkbox" name="products" value="{{ product.id }}" id="product-{{ product.id }}">
+                </td>
+                <td><label for="product-{{ product.id }}">{{ product.name }}</label></td>
+                <td>{{ product.description }}</td>
+                <td>${{ product.price }}</td>
+                <td>
+                  <input type="number" name="quantities" min="1" value="1" class="form-control" style="width: 80px;">
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">No products available</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary">Create Order</button>
+      <a href="{% url 'orders:order_list' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

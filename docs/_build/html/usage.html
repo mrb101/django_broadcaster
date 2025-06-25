@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usage &#8212; Django Dispatch 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Backends" href="backends.html" />
+    <link rel="prev" title="Configuration" href="configuration.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<p>This guide covers the basic usage of Django Dispatch for publishing and handling events.</p>
+<section id="publishing-events">
+<h2>Publishing Events<a class="headerlink" href="#publishing-events" title="Link to this heading">¶</a></h2>
+<p>Django Dispatch provides several ways to publish events.</p>
+<section id="basic-event-publishing">
+<h3>Basic Event Publishing<a class="headerlink" href="#basic-event-publishing" title="Link to this heading">¶</a></h3>
+<p>The simplest way to publish an event is using the publisher:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+
+<span class="c1"># Publish an event</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
+    <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;user.created&#39;</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;user-service&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="s1">&#39;user@example.com&#39;</span><span class="p">}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This creates an event in the outbox that will be published by the worker process.</p>
+</section>
+<section id="publishing-cloudevents">
+<h3>Publishing CloudEvents<a class="headerlink" href="#publishing-cloudevents" title="Link to this heading">¶</a></h3>
+<p>You can also create and publish CloudEvents directly:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.events</span><span class="w"> </span><span class="kn">import</span> <span class="n">CloudEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+
+<span class="c1"># Create a CloudEvent</span>
+<span class="n">cloud_event</span> <span class="o">=</span> <span class="n">CloudEvent</span><span class="p">(</span>
+    <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;order.completed&#39;</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;order-service&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;order_id&#39;</span><span class="p">:</span> <span class="mi">456</span><span class="p">,</span> <span class="s1">&#39;total&#39;</span><span class="p">:</span> <span class="mf">99.99</span><span class="p">},</span>
+    <span class="n">subject</span><span class="o">=</span><span class="s1">&#39;Order #456&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Publish the CloudEvent</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">publish_cloud_event</span><span class="p">(</span><span class="n">cloud_event</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="scheduling-events">
+<h3>Scheduling Events<a class="headerlink" href="#scheduling-events" title="Link to this heading">¶</a></h3>
+<p>You can schedule events to be published at a specific time:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
+<span class="c1"># Schedule an event for 1 hour from now</span>
+<span class="n">scheduled_time</span> <span class="o">=</span> <span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">event</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
+    <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;reminder.send&#39;</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;reminder-service&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Remember to complete your profile&#39;</span><span class="p">},</span>
+    <span class="n">scheduled_at</span><span class="o">=</span><span class="n">scheduled_time</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="handling-events">
+<h2>Handling Events<a class="headerlink" href="#handling-events" title="Link to this heading">¶</a></h2>
+<p>Django Dispatch provides a registry for handling events locally.</p>
+<section id="registering-event-handlers">
+<h3>Registering Event Handlers<a class="headerlink" href="#registering-event-handlers" title="Link to this heading">¶</a></h3>
+<p>You can register handlers for specific event types:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">event_registry</span>
+
+<span class="nd">@event_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;user.created&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">handle_user_created</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle user created events&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;User created: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Do something with the event</span>
+
+<span class="c1"># Register a handler for multiple event types</span>
+<span class="nd">@event_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;order.created&#39;</span><span class="p">)</span>
+<span class="nd">@event_registry</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s1">&#39;order.updated&#39;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">handle_order_events</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle order events&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Order event: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="c1"># Do something with the event</span>
+</pre></div>
+</div>
+</section>
+<section id="global-event-handlers">
+<h3>Global Event Handlers<a class="headerlink" href="#global-event-handlers" title="Link to this heading">¶</a></h3>
+<p>You can also register global handlers that receive all events:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@event_registry</span><span class="o">.</span><span class="n">register</span><span class="p">()</span>  <span class="c1"># No event_type means handle all events</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">log_all_events</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Log all events&quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Event received: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">event_type</span><span class="si">}</span><span class="s2"> from </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-the-worker">
+<h2>Running the Worker<a class="headerlink" href="#running-the-worker" title="Link to this heading">¶</a></h2>
+<p>To process events from the outbox and publish them to the configured backends, you need to run the outbox worker:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>manage.py<span class="w"> </span>outbox_worker
+</pre></div>
+</div>
+<p>For production use, you should run the worker as a background service using a process manager like Supervisor, systemd, or Kubernetes.</p>
+<p>Example Configuration for Supervisor:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[program:outbox_worker]</span>
+<span class="na">command</span><span class="o">=</span><span class="s">/path/to/venv/bin/python /path/to/project/manage.py outbox_worker</span>
+<span class="na">directory</span><span class="o">=</span><span class="s">/path/to/project</span>
+<span class="na">user</span><span class="o">=</span><span class="s">www-data</span>
+<span class="na">autostart</span><span class="o">=</span><span class="s">true</span>
+<span class="na">autorestart</span><span class="o">=</span><span class="s">true</span>
+<span class="na">redirect_stderr</span><span class="o">=</span><span class="s">true</span>
+<span class="na">stdout_logfile</span><span class="o">=</span><span class="s">/var/log/outbox_worker.log</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-usage">
+<h2>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Link to this heading">¶</a></h2>
+<section id="transactional-publishing">
+<h3>Transactional Publishing<a class="headerlink" href="#transactional-publishing" title="Link to this heading">¶</a></h3>
+<p>To ensure events are only published if a transaction is successful, use Django’s transaction management:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">transaction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+
+<span class="nd">@transaction</span><span class="o">.</span><span class="n">atomic</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_user_with_event</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="p">):</span>
+    <span class="c1"># Create user in database</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">)</span>
+
+    <span class="c1"># Publish event - this will only be committed if the transaction succeeds</span>
+    <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
+        <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;user.created&#39;</span><span class="p">,</span>
+        <span class="n">source</span><span class="o">=</span><span class="s1">&#39;user-service&#39;</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s1">&#39;email&#39;</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">email</span><span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">user</span>
+</pre></div>
+</div>
+</section>
+<section id="error-handling-and-retries">
+<h3>Error Handling and Retries<a class="headerlink" href="#error-handling-and-retries" title="Link to this heading">¶</a></h3>
+<p>Django Dispatch automatically handles retries for failed events with exponential backoff:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure max retries when publishing</span>
+<span class="n">event</span> <span class="o">=</span> <span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
+    <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;notification.send&#39;</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;notification-service&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Hello&#39;</span><span class="p">},</span>
+    <span class="n">max_retries</span><span class="o">=</span><span class="mi">5</span>  <span class="c1"># Override default max retries</span>
+<span class="p">)</span>
+
+<span class="c1"># Check event status</span>
+<span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Event failed: </span><span class="si">{</span><span class="n">event</span><span class="o">.</span><span class="n">last_error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Dispatch</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#publishing-events">Publishing Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handling-events">Handling Events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-the-worker">Running the Worker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-usage">Advanced Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/events.html">Events API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/publishers.html">Publishers API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/registry.html">Registry API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/backends.html">Backends API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/signals.html">Signals API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="configuration.html" title="previous chapter">Configuration</a></li>
+      <li>Next: <a href="backends.html" title="next chapter">Backends</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023, Hamadeh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

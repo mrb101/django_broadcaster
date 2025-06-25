@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Configuration &#8212; Django Dispatch 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Usage" href="usage.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">¶</a></h1>
+<p>Django Dispatch provides several configuration options that can be set in your Django settings file.</p>
+<section id="basic-configuration">
+<h2>Basic Configuration<a class="headerlink" href="#basic-configuration" title="Link to this heading">¶</a></h2>
+<p>At a minimum, you need to configure at least one publisher backend:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
+            <span class="s1">&#39;stream_name&#39;</span><span class="p">:</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-backends">
+<h2>Multiple Backends<a class="headerlink" href="#multiple-backends" title="Link to this heading">¶</a></h2>
+<p>You can configure multiple backends for different types of events:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">OUTBOX_PUBLISHERS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
+            <span class="s1">&#39;stream_name&#39;</span><span class="p">:</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;high_priority&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;BACKEND&#39;</span><span class="p">:</span> <span class="s1">&#39;django_dispatch.backends.RedisStreamBackend&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;redis.example.com&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>
+            <span class="s1">&#39;stream_name&#39;</span><span class="p">:</span> <span class="s1">&#39;high_priority_events&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;max_len&#39;</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>When publishing events, you can specify which backend to use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">django_dispatch.publishers</span><span class="w"> </span><span class="kn">import</span> <span class="n">publisher</span>
+
+<span class="n">publisher</span><span class="o">.</span><span class="n">publish_event</span><span class="p">(</span>
+    <span class="n">event_type</span><span class="o">=</span><span class="s1">&#39;user.created&#39;</span><span class="p">,</span>
+    <span class="n">source</span><span class="o">=</span><span class="s1">&#39;user-service&#39;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;user_id&#39;</span><span class="p">:</span> <span class="mi">123</span><span class="p">},</span>
+    <span class="n">backend</span><span class="o">=</span><span class="s1">&#39;high_priority&#39;</span>  <span class="c1"># Specify the backend</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="backend-options">
+<h2>Backend Options<a class="headerlink" href="#backend-options" title="Link to this heading">¶</a></h2>
+<section id="redis-stream-backend">
+<h3>Redis Stream Backend<a class="headerlink" href="#redis-stream-backend" title="Link to this heading">¶</a></h3>
+<p>The Redis Stream backend supports the following options:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;OPTIONS&#39;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>           <span class="c1"># Redis host</span>
+    <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="mi">6379</span><span class="p">,</span>                  <span class="c1"># Redis port</span>
+    <span class="s1">&#39;db&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>                       <span class="c1"># Redis database number</span>
+    <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>              <span class="c1"># Redis password (optional)</span>
+    <span class="s1">&#39;stream_name&#39;</span><span class="p">:</span> <span class="s1">&#39;events&#39;</span><span class="p">,</span>       <span class="c1"># Name of the Redis stream</span>
+    <span class="s1">&#39;max_len&#39;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>              <span class="c1"># Maximum length of the stream</span>
+    <span class="s1">&#39;connect_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>          <span class="c1"># Connection timeout in seconds</span>
+    <span class="s1">&#39;socket_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>           <span class="c1"># Socket timeout in seconds</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="worker-configuration">
+<h2>Worker Configuration<a class="headerlink" href="#worker-configuration" title="Link to this heading">¶</a></h2>
+<p>The outbox worker processes events from the outbox and publishes them to the configured backends. You can configure the worker behavior:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Worker settings</span>
+<span class="n">OUTBOX_WORKER</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;BATCH_SIZE&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>             <span class="c1"># Number of events to process in one batch</span>
+    <span class="s1">&#39;SLEEP_TIME&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>               <span class="c1"># Sleep time between batches in seconds</span>
+    <span class="s1">&#39;MAX_RETRIES&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>              <span class="c1"># Default maximum retry attempts</span>
+    <span class="s1">&#39;RETRY_BACKOFF&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>         <span class="c1"># Use exponential backoff for retries</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-configuration">
+<h2>Advanced Configuration<a class="headerlink" href="#advanced-configuration" title="Link to this heading">¶</a></h2>
+<section id="event-retention">
+<h3>Event Retention<a class="headerlink" href="#event-retention" title="Link to this heading">¶</a></h3>
+<p>You can configure how long to keep events in the database:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Event retention settings</span>
+<span class="n">OUTBOX_RETENTION</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;CLEANUP_PUBLISHED&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>     <span class="c1"># Clean up published events</span>
+    <span class="s1">&#39;PUBLISHED_RETENTION_DAYS&#39;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span> <span class="c1"># Keep published events for 7 days</span>
+    <span class="s1">&#39;FAILED_RETENTION_DAYS&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>   <span class="c1"># Keep failed events for 30 days</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Link to this heading">¶</a></h3>
+<p>Django Dispatch uses Python’s logging module. You can configure logging in your Django settings:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">LOGGING</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;disable_existing_loggers&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;console&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;class&#39;</span><span class="p">:</span> <span class="s1">&#39;logging.StreamHandler&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;loggers&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;django_dispatch&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;handlers&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;console&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="s1">&#39;INFO&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Django Dispatch</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#basic-configuration">Basic Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiple-backends">Multiple Backends</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#backend-options">Backend Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#worker-configuration">Worker Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#advanced-configuration">Advanced Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backends.html">Backends</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/models.html">Models API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/events.html">Events API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/publishers.html">Publishers API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/registry.html">Registry API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/backends.html">Backends API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/signals.html">Signals API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="usage.html" title="next chapter">Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2023, Hamadeh.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/configuration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

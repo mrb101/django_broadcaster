@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Products</h1>
+    <a href="{% url 'orders:create_order' %}" class="btn btn-primary">Create Order</a>
+  </div>
+
+  {% if messages %}
+    <div class="messages mb-4">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <h5>{{ product.name }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
+          {% if product.in_stock %}
+          <p class="text-success">In Stock</p>
+          {% else %}
+          <p class="text-danger">Out of Stock</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info">
+        No products available at this time.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

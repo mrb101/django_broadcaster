@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Order #{{ order.id }} Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Order #{{ order.id }} Details</h1>
+    <div>
+      <a href="{% url 'orders:order_list' %}" class="btn btn-secondary">Back to Orders</a>
+
+      {% if user.is_staff and order.status == 'pending' %}
+      <form method="post" action="{% url 'orders:approve_order' order.id %}" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Approve Order</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Order Information</h4>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Order ID:</strong> {{ order.id }}</p>
+          <p><strong>Customer:</strong> {{ order.customer.username }}</p>
+          <p><strong>Email:</strong> {{ order.customer.email }}</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Status:</strong> <span class="badge bg-{% if order.status == 'approved' %}success{% elif order.status == 'pending' %}warning{% else %}danger{% endif %}">{{ order.status|title }}</span></p>
+          <p><strong>Created:</strong> {{ order.created_at }}</p>
+          {% if order.approved_at %}
+          <p><strong>Approved:</strong> {{ order.approved_at }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h4>Order Items</h4>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th class="text-end">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in order.orderitem_set.all %}
+            <tr>
+              <td>{{ item.product.name }}</td>
+              <td>${{ item.price }}</td>
+              <td>{{ item.quantity }}</td>
+              <td class="text-end">${{ item.get_subtotal }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No items in this order</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="3" class="text-end">Total:</th>
+              <th class="text-end">${{ order.total_amount }}</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
